@@ -1,0 +1,36 @@
+{
+  "name": "luma-share-kit",
+  "version": "1.0.0",
+  "description": "Open-source Luma webhook â†?welcome email â†?signed share page â†?social poster kit",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:restart": "pm2 restart luma-webhook",
+    "pm2:logs": "pm2 logs luma-webhook"
+  },
+  "keywords": [
+    "luma",
+    "webhook",
+    "share",
+    "sqlite",
+    "nodemailer",
+    "open-source"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jintao-dd/luma-share-kit.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.2",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "jimp": "^0.22.12",
+    "multer": "^2.2.0",
+    "nodemailer": "^6.10.0",
+    "qrcode": "^1.5.4",
+    "better-sqlite3": "^11.10.0"
+  }
+}

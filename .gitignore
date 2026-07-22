@@ -1,0 +1,11 @@
+uploads/
+node_modules/
+luma_data.db
+*.log
+.env
+config.js
+deploy/env.sh
+*.zip
+_pack_tmp/
+.DS_Store
+.tmp-*

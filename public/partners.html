@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>合作链接 | Your Event 2026</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --grouped: #ffffff;
+      --elevated: #e8e8ed;
+      --separator: rgba(60, 60, 67, 0.18);
+      --hairline: rgba(0, 0, 0, 0.06);
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #86868b;
+      --link: #0066cc;
+      --link-hover: #0077ed;
+      --green: #248a3d;
+      --danger: #d70015;
+      --warning: #bf4800;
+      --hover-fill: rgba(0, 0, 0, 0.04);
+      --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+      --radius-group: 12px;
+      --radius-pill: 980px;
+      --content-max: 980px;
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --surface: var(--grouped);
+      --border: var(--hairline);
+      --muted: var(--text-secondary);
+      --primary: var(--link);
+      --primary-hover: var(--link-hover);
+      --primary-soft: rgba(0, 102, 204, 0.08);
+      --radius: var(--radius-group);
+      --shadow: var(--card-shadow);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.47059;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body.dash-ready .wrap {
+      animation: fadeUp 0.6s var(--ease-out) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    body.is-gated .wrap { visibility: hidden; }
+    body.modal-open { overflow: hidden; }
+
+    .login-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      padding: 24px;
+    }
+    .login-gate.is-hidden { display: none; }
+
+    .login-card {
+      width: min(380px, 100%);
+      background: var(--grouped);
+      border: 0.5px solid var(--hairline);
+      border-radius: 18px;
+      padding: 36px 32px 32px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+    .login-card h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .login-card > p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .login-card .field { text-align: left; }
+    .login-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fff2f2;
+      border: 1px solid rgba(215, 0, 21, 0.15);
+      text-align: left;
+    }
+
+    .wrap {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 32px 22px 80px;
+    }
+    @media (min-width: 734px) {
+      .wrap { padding: 48px 44px 96px; }
+    }
+
+    .header {
+      margin-bottom: 36px;
+    }
+    @media (min-width: 734px) {
+      .header { margin-bottom: 44px; }
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .pill {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .nav-link {
+      font-size: 14px;
+      color: var(--link);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--link-hover); text-decoration: underline; }
+    .header h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.08;
+    }
+    .header-desc {
+      margin-top: 8px;
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.47059;
+      max-width: 28em;
+    }
+
+    /* —— 新建区：无外层卡片 —— */
+    .create-section {
+      margin-bottom: 48px;
+    }
+    .create-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .input-combo {
+      display: flex;
+      align-items: stretch;
+      max-width: 560px;
+      background: var(--grouped);
+      border: 0.5px solid var(--hairline);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+    }
+    .input-combo:focus-within {
+      border-color: rgba(0, 102, 204, 0.28);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.07);
+    }
+    .input-combo input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      background: transparent;
+      padding: 14px 18px;
+      font: inherit;
+      font-size: 17px;
+      color: var(--text);
+    }
+    .input-combo input:focus { outline: none; }
+    .input-combo input::placeholder { color: var(--text-tertiary); }
+    .input-combo .btn-generate {
+      flex-shrink: 0;
+      margin: 6px;
+      padding: 0 22px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .create-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.45;
+    }
+
+    .list-section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.011em;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .partner-list {
+      background: var(--grouped);
+      border: 0.5px solid var(--hairline);
+      border-radius: var(--radius-group);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+    .partner-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 0.5px solid var(--separator);
+    }
+    .partner-row:last-child { border-bottom: none; }
+    .partner-row:hover { background: var(--hover-fill); }
+    .partner-main { min-width: 0; flex: 1; }
+    .partner-name {
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.022em;
+      color: var(--text);
+    }
+    .partner-path {
+      margin-top: 3px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .partner-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+    .action-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      font-size: 14px;
+      color: var(--link);
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .action-link:hover { text-decoration: underline; }
+    .action-link.action-danger { color: var(--danger); }
+
+    .panel {
+      background: var(--grouped);
+      border: 0.5px solid var(--hairline);
+      border-radius: var(--radius-group);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .panel-body { padding: 22px 24px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 0.5px solid var(--hairline);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 17px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .image-upload-row input:focus {
+      outline: none;
+      border-color: rgba(0, 102, 204, 0.28);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.07);
+      background: #fff;
+    }
+    .field input:focus:not(:focus-visible),
+    .field textarea:focus:not(:focus-visible) {
+      border-color: var(--hairline);
+      box-shadow: none;
+      background: var(--bg);
+    }
+    .field textarea { min-height: 96px; resize: vertical; line-height: 1.55; }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+    .field-hint strong { color: var(--text); font-weight: 600; }
+    .field-hint-warn { color: var(--warning); font-weight: 500; }
+    .field-hint-over { color: var(--danger); font-weight: 500; }
+
+    .edit-tip {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 0.5px solid var(--hairline);
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .edit-tip strong { color: var(--text); font-weight: 600; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 400;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.15s var(--ease), background 0.15s var(--ease);
+    }
+    .btn:active { opacity: 0.65; }
+    .btn-primary { background: var(--link); color: #fff; }
+    .btn-primary:hover { background: var(--link-hover); }
+    .btn-outline {
+      background: var(--grouped);
+      color: var(--text);
+      border: 0.5px solid var(--hairline);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .btn-outline:hover { background: var(--elevated); }
+    .btn-sm { padding: 7px 14px; font-size: 13px; }
+    .btn-danger {
+      background: #fff2f2;
+      color: var(--danger);
+      border: 0.5px solid rgba(215, 0, 21, 0.2);
+    }
+    .btn-danger:hover { background: #ffebeb; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .result-box {
+      margin-top: 16px;
+      max-width: 560px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: var(--grouped);
+      border: 0.5px solid var(--hairline);
+      box-shadow: var(--card-shadow);
+    }
+    .result-box.hidden { display: none; }
+    .result-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .result-url {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--link);
+      word-break: break-all;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+    .result-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .result-actions .action-link { font-size: 15px; font-weight: 500; }
+
+    .empty {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(29, 29, 31, 0.92);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+      z-index: 200;
+      backdrop-filter: saturate(180%) blur(12px);
+    }
+    .toast.show { opacity: 1; }
+
+    /* 编辑弹窗 */
+    .edit-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .edit-overlay.show { display: flex; }
+    .edit-dialog {
+      width: min(1080px, 100%);
+      max-height: min(92vh, 900px);
+      background: var(--grouped);
+      border-radius: 16px;
+      border: 0.5px solid var(--hairline);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .edit-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 22px;
+      border-bottom: 0.5px solid var(--separator);
+      flex-shrink: 0;
+    }
+    .edit-head h2 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .edit-head p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .edit-body {
+      display: grid;
+      grid-template-columns: 1fr min(380px, 42%);
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .edit-form {
+      padding: 20px 22px;
+      overflow-y: auto;
+      border-right: 0.5px solid var(--separator);
+    }
+    .edit-preview-col {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--bg);
+    }
+    .edit-preview-bar {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 0.5px solid var(--separator);
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--grouped);
+    }
+    .edit-preview-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+      min-height: 360px;
+      background: var(--bg);
+    }
+    .edit-foot {
+      padding: 16px 22px;
+      border-top: 0.5px solid var(--separator);
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      background: var(--grouped);
+    }
+
+    .logo-preview-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+    .logo-preview {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: var(--bg);
+      border: 0.5px solid var(--hairline);
+      padding: 4px;
+    }
+    .logo-preview-fallback {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--link);
+      font-size: 18px;
+    }
+    .image-upload-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .image-upload-row input[type="text"],
+    .image-upload-row input:not([type="file"]) {
+      flex: 1;
+      min-width: 160px;
+      padding: 11px 14px;
+      border: 0.5px solid var(--hairline);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 17px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+    }
+    .image-upload-row input:focus {
+      outline: none;
+      border-color: rgba(0, 102, 204, 0.45);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+      background: #fff;
+    }
+    .hero-preview-row { margin-top: 10px; }
+    .hero-preview {
+      width: 100%;
+      max-width: 200px;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: var(--bg);
+      border: 0.5px solid var(--hairline);
+    }
+    .hero-preview-empty {
+      width: 100%;
+      max-width: 200px;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px dashed var(--separator);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+    .edit-more { margin-top: 4px; }
+    .edit-more summary {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--link);
+      padding: 10px 0;
+      user-select: none;
+    }
+
+    @media (max-width: 820px) {
+      .edit-body { grid-template-columns: 1fr; }
+      .edit-form {
+        border-right: none;
+        border-bottom: 0.5px solid var(--separator);
+        max-height: 50vh;
+      }
+      .edit-preview-col { min-height: 320px; }
+    }
+    @media (max-width: 640px) {
+      .partner-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .partner-actions { width: 100%; justify-content: flex-start; }
+      .input-combo { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-gate is-hidden" id="loginGate">
+    <div class="login-card">
+      <h2>合作链接</h2>
+      <p>与统计看板共用账号</p>
+      <form id="loginForm">
+        <div class="field"><label>用户名</label><input id="loginUser" required /></div>
+        <div class="field"><label>密码</label><input id="loginPass" type="password" required /></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">登录</button>
+        <p id="loginError" class="login-error" hidden></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="edit-overlay" id="editOverlay" aria-hidden="true">
+    <div class="edit-dialog" role="dialog" aria-labelledby="editTitle">
+      <div class="edit-head">
+        <div>
+          <h2 id="editTitle">编辑合作落地页</h2>
+          <p id="editSub">/p/…</p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" id="editCloseBtn">关闭</button>
+      </div>
+      <div class="edit-body">
+        <form class="edit-form" id="editForm" autocomplete="off">
+          <div class="edit-tip">
+            <strong>落地页结构：</strong>海报区 Logo + 主标题 → 页面大标题 → 下方引用块仅显示「介绍文案」。主标题与介绍请分开写，勿重复；介绍建议 280 字以内。
+          </div>
+          <div class="field">
+            <label>合作伙伴名称</label>
+            <input id="ePartnerName" required />
+            <div class="field-hint">品牌名，用于海报区与渠道说明</div>
+          </div>
+          <div class="field">
+            <label>Logo / 头像</label>
+            <div class="image-upload-row">
+              <input id="eLogo" placeholder="https://… 或点击上传" />
+              <button type="button" class="btn btn-outline btn-sm" id="logoUploadBtn">上传</button>
+              <input type="file" id="logoFileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+            </div>
+            <div class="logo-preview-row" id="logoPreviewRow">
+              <div class="logo-preview-fallback" id="logoFallback">G</div>
+            </div>
+            <div class="field-hint"><strong>推荐 512×512 px</strong> 正方形 · PNG/JPG/WebP · ≤2MB · 落地页左下角圆形约 48px · 上传后自动裁切为正方形</div>
+          </div>
+          <div class="field">
+            <label>主标题</label>
+            <input id="eHeadline" placeholder="YourOrg × Your Event 2026" maxlength="120" />
+            <div class="field-hint" id="eHeadlineHint">显示在海报标语 + 页面顶部大标题 · 建议 80 字以内</div>
+          </div>
+          <div class="field">
+            <label>介绍文案</label>
+            <textarea id="eBody" placeholder="欢迎通过 YourOrg 专属通道加入 Your Event 2026…" maxlength="400"></textarea>
+            <div class="field-hint" id="eBodyHint">仅显示在倒计时下方的引用块 · 超过 280 字会自动截断</div>
+          </div>
+          <div class="field">
+            <label>渠道说明</label>
+            <input id="eSocial" placeholder="via YourOrg" maxlength="60" />
+            <div class="field-hint">大标题下方一行小字，如 via YourOrg</div>
+          </div>
+          <details class="edit-more">
+            <summary>更多选项（按钮、海报）</summary>
+            <div class="field" style="margin-top:10px">
+              <label>按钮文案</label>
+              <input id="eCta" placeholder="Get tickets" />
+            </div>
+            <div class="field">
+              <label>按钮下方说明</label>
+              <input id="eCtaSub" placeholder="Exclusive access via …" />
+            </div>
+            <div class="field">
+              <label>海报背景图</label>
+              <div class="image-upload-row">
+                <input id="eHero" placeholder="留空使用活动默认海报，或点击上传" />
+                <button type="button" class="btn btn-outline btn-sm" id="heroUploadBtn">上传</button>
+                <input type="file" id="heroFileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+              </div>
+              <div class="hero-preview-row" id="heroPreviewRow">
+                <div class="hero-preview-empty">未设置 · 使用默认活动海报</div>
+              </div>
+              <div class="field-hint"><strong>推荐 1200×1200 px</strong>（1:1 正方形，与落地页海报区一致）· JPG/PNG/WebP · ≤2MB · 上传后宽最大 1920px · 留空则用活动默认海报</div>
+            </div>
+          </details>
+        </form>
+        <div class="edit-preview-col">
+          <div class="edit-preview-bar">
+            <span>实时预览</span>
+            <button type="button" class="btn btn-outline btn-sm" id="refreshPreviewBtn">刷新</button>
+          </div>
+          <iframe class="edit-preview-frame" id="editPreviewFrame" title="落地页预览"></iframe>
+        </div>
+      </div>
+      <div class="edit-foot">
+        <button type="button" class="btn btn-outline" id="editCancelBtn">取消</button>
+        <button type="button" class="btn btn-primary" id="editSaveBtn">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="header">
+      <div class="header-top">
+        <span class="pill">Your Event 2026</span>
+        <a class="nav-link" href="/stats.html">统计看板</a>
+      </div>
+      <h1>合作链接</h1>
+      <p class="header-desc">为合作伙伴生成专属追踪链接，自动创建落地页。</p>
+    </header>
+
+    <section class="create-section">
+      <label class="create-label" for="partnerNameInput">新建合作伙伴</label>
+      <div class="input-combo">
+        <input id="partnerNameInput" type="text" placeholder="YourOrg、某某 VC…" autocomplete="off" />
+        <button class="btn btn-primary btn-generate" type="button" id="generateBtn">生成</button>
+      </div>
+      <p class="create-hint">填写品牌名称即可，标题与落地页内容会自动生成。</p>
+      <div class="result-box hidden" id="resultBox">
+        <div class="result-label">已生成链接</div>
+        <div class="result-url" id="resultUrl"></div>
+        <div class="result-actions">
+          <button type="button" class="action-link" id="copyResultBtn">复制链接</button>
+          <a class="action-link" id="openResultBtn" target="_blank" rel="noopener">预览落地页</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="list-section">
+      <h2 class="section-title" id="listTitle">链接列表</h2>
+      <div class="partner-list" id="listWrap">
+        <div class="empty">加载中…</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const AUTH_TOKEN_KEY = 'statsAuthToken';
+    const INTRO_SOFT_MAX = 280;
+    const INTRO_HARD_MAX = 400;
+    const HEADLINE_SOFT_MAX = 80;
+    let partners = [];
+    let lastGeneratedUrl = '';
+    let editingSlug = '';
+    let previewTimer = null;
+
+    function loadAuthToken() {
+      return localStorage.getItem(AUTH_TOKEN_KEY) || sessionStorage.getItem(AUTH_TOKEN_KEY);
+    }
+
+    function authHeaders() {
+      const token = loadAuthToken();
+      return token ? { Authorization: `Basic ${token}` } : {};
+    }
+
+    function showLogin(msg) {
+      document.body.classList.add('is-gated');
+      document.getElementById('loginGate').classList.remove('is-hidden');
+      const err = document.getElementById('loginError');
+      if (msg) { err.textContent = msg; err.hidden = false; } else err.hidden = true;
+    }
+
+    function hideLogin() {
+      document.body.classList.remove('is-gated');
+      document.body.classList.add('dash-ready');
+      document.getElementById('loginGate').classList.add('is-hidden');
+    }
+
+    async function apiFetch(url, options = {}) {
+      const res = await fetch(url, {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...authHeaders(), ...(options.headers || {}) },
+      });
+      if (res.status === 401) { showLogin('用户名或密码错误'); throw new Error('unauthorized'); }
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try { const j = await res.json(); if (j.message) msg = j.message; } catch {}
+        throw new Error(msg);
+      }
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('application/json')) return res.json();
+      return res.text();
+    }
+
+    async function uploadPartnerImage(file, kind) {
+      const form = new FormData();
+      form.append('upload_file', file, file.name || `${kind}.jpg`);
+      form.append('kind', kind);
+      const res = await fetch('/api/partners/upload-image', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: form,
+      });
+      if (res.status === 401) { showLogin('用户名或密码错误'); throw new Error('unauthorized'); }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `上传失败 (${res.status})`);
+      return data.url || '';
+    }
+
+    function pickImageFile(inputId) {
+      return new Promise((resolve) => {
+        const input = document.getElementById(inputId);
+        input.value = '';
+        input.onchange = () => {
+          const file = input.files && input.files[0];
+          input.onchange = null;
+          resolve(file || null);
+        };
+        input.click();
+      });
+    }
+
+    function showToast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text;
+      el.classList.add('show');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => showToast('复制失败'));
+    }
+
+    function showResult(url) {
+      lastGeneratedUrl = url;
+      const box = document.getElementById('resultBox');
+      box.classList.remove('hidden');
+      document.getElementById('resultUrl').textContent = url;
+      document.getElementById('openResultBtn').href = url;
+    }
+
+    async function loadPartners() {
+      const data = await apiFetch('/api/partners');
+      partners = data.partners || [];
+      renderList();
+    }
+
+    function renderList() {
+      const wrap = document.getElementById('listWrap');
+      const titleEl = document.getElementById('listTitle');
+      if (titleEl) {
+        titleEl.textContent = partners.length ? `链接列表 · ${partners.length}` : '链接列表';
+      }
+      if (!partners.length) {
+        wrap.innerHTML = '<div class="empty">暂无合作链接</div>';
+        return;
+      }
+
+      const rows = partners.map((p) => {
+        const url = `${location.origin}/p/${encodeURIComponent(p.slug)}`;
+        const path = `/p/${escapeHtml(p.slug)}`;
+        return `<div class="partner-row" data-slug="${escapeHtml(p.slug)}">
+          <div class="partner-main">
+            <div class="partner-name">${escapeHtml(p.partner_name || p.slug)}</div>
+            <div class="partner-path" title="${escapeHtml(url)}">${path}</div>
+          </div>
+          <div class="partner-actions">
+            <button type="button" class="action-link" data-copy="${escapeHtml(url)}">复制</button>
+            <a class="action-link" href="${escapeHtml(url)}" target="_blank" rel="noopener">预览</a>
+            <button type="button" class="action-link" data-edit="${escapeHtml(p.slug)}">编辑</button>
+            <button type="button" class="action-link action-danger" data-del="${escapeHtml(p.slug)}">删除</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      wrap.innerHTML = rows;
+
+      wrap.querySelectorAll('[data-copy]').forEach((btn) => {
+        btn.addEventListener('click', () => copyText(btn.dataset.copy));
+      });
+      wrap.querySelectorAll('[data-del]').forEach((btn) => {
+        btn.addEventListener('click', () => deletePartner(btn.dataset.del));
+      });
+      wrap.querySelectorAll('[data-edit]').forEach((btn) => {
+        btn.addEventListener('click', () => openEdit(btn.dataset.edit));
+      });
+    }
+
+    async function generateLink() {
+      const name = document.getElementById('partnerNameInput').value.trim();
+      if (!name) { showToast('请填写合作伙伴名称'); return; }
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.textContent = '生成中…';
+      try {
+        const data = await apiFetch('/api/partners/generate', {
+          method: 'POST',
+          body: JSON.stringify({ partner_name: name }),
+        });
+        showResult(data.public_url);
+        copyText(data.public_url);
+        await loadPartners();
+        document.getElementById('partnerNameInput').value = '';
+        document.getElementById('partnerNameInput').focus();
+      } catch (e) {
+        if (e.message !== 'unauthorized') showToast(e.message || '生成失败');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '生成';
+      }
+    }
+
+    async function deletePartner(slug) {
+      if (!confirm(`删除 ${slug} 的合作链接？`)) return;
+      try {
+        await apiFetch(`/api/partners/${encodeURIComponent(slug)}`, { method: 'DELETE' });
+        showToast('已删除');
+        await loadPartners();
+      } catch (e) {
+        showToast(e.message || '删除失败');
+      }
+    }
+
+    function readEditForm() {
+      const slug = editingSlug;
+      const partner_name = document.getElementById('ePartnerName').value.trim();
+      return {
+        slug,
+        partner_name,
+        logo_url: document.getElementById('eLogo').value.trim(),
+        headline: document.getElementById('eHeadline').value.trim(),
+        body_text: document.getElementById('eBody').value.trim(),
+        social_proof: document.getElementById('eSocial').value.trim(),
+        cta_label: document.getElementById('eCta').value.trim(),
+        cta_sub: document.getElementById('eCtaSub').value.trim(),
+        hero_image_url: document.getElementById('eHero').value.trim(),
+        enabled: true,
+      };
+    }
+
+    function updateFieldHints() {
+      const headlineLen = document.getElementById('eHeadline').value.length;
+      const bodyLen = document.getElementById('eBody').value.length;
+      const headlineHint = document.getElementById('eHeadlineHint');
+      const bodyHint = document.getElementById('eBodyHint');
+
+      headlineHint.className = 'field-hint';
+      if (headlineLen > HEADLINE_SOFT_MAX) {
+        headlineHint.className = 'field-hint field-hint-warn';
+        headlineHint.textContent = `${headlineLen} 字 · 标题过长可能换行过多，建议 ${HEADLINE_SOFT_MAX} 字以内`;
+      } else {
+        headlineHint.textContent = `显示在海报标语 + 页面顶部大标题 · ${headlineLen}/${HEADLINE_SOFT_MAX} 字（建议）`;
+      }
+
+      bodyHint.className = 'field-hint';
+      if (bodyLen > INTRO_SOFT_MAX) {
+        bodyHint.className = bodyLen >= INTRO_HARD_MAX ? 'field-hint field-hint-over' : 'field-hint field-hint-warn';
+        bodyHint.textContent = `${bodyLen} 字 · 超过 ${INTRO_SOFT_MAX} 字保存后落地页会自动截断显示 …`;
+      } else {
+        bodyHint.textContent = `仅显示在引用块 · ${bodyLen}/${INTRO_SOFT_MAX} 字（超出自动截断）`;
+      }
+    }
+
+    function fillEditForm(p) {
+      document.getElementById('ePartnerName').value = p.partner_name || '';
+      document.getElementById('eLogo').value = p.logo_url || '';
+      document.getElementById('eHeadline').value = p.headline || '';
+      document.getElementById('eBody').value = p.body_text || '';
+      document.getElementById('eSocial').value = p.social_proof || '';
+      document.getElementById('eCta').value = p.cta_label || '';
+      document.getElementById('eCtaSub').value = p.cta_sub || '';
+      document.getElementById('eHero').value = p.hero_image_url || '';
+      updateLogoPreview();
+      updateHeroPreview();
+      updateFieldHints();
+    }
+
+    function updateHeroPreview() {
+      const url = document.getElementById('eHero').value.trim();
+      const row = document.getElementById('heroPreviewRow');
+      if (url) {
+        row.innerHTML = `<img class="hero-preview" src="${escapeHtml(url)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-preview-empty',textContent:'图片加载失败'}))" />`;
+      } else {
+        row.innerHTML = '<div class="hero-preview-empty">未设置 · 使用默认活动海报</div>';
+      }
+    }
+
+    async function handleImageUpload(kind) {
+      const file = await pickImageFile(kind === 'logo' ? 'logoFileInput' : 'heroFileInput');
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('图片不能超过 2MB');
+        return;
+      }
+      const btn = document.getElementById(kind === 'logo' ? 'logoUploadBtn' : 'heroUploadBtn');
+      const input = document.getElementById(kind === 'logo' ? 'eLogo' : 'eHero');
+      const prevText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '上传中…';
+      try {
+        const url = await uploadPartnerImage(file, kind);
+        input.value = url;
+        if (kind === 'logo') updateLogoPreview();
+        else updateHeroPreview();
+        schedulePreview();
+        showToast(kind === 'logo' ? 'Logo 已上传' : '海报已上传');
+      } catch (e) {
+        if (e.message !== 'unauthorized') showToast(e.message || '上传失败');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prevText;
+      }
+    }
+
+    function updateLogoPreview() {
+      const url = document.getElementById('eLogo').value.trim();
+      const name = document.getElementById('ePartnerName').value.trim();
+      const row = document.getElementById('logoPreviewRow');
+      const letter = (name || 'P').charAt(0).toUpperCase();
+      if (url) {
+        row.innerHTML = `<img class="logo-preview" src="${escapeHtml(url)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'logo-preview-fallback',textContent:'${letter}'}))" />`;
+      } else {
+        row.innerHTML = `<div class="logo-preview-fallback" id="logoFallback">${escapeHtml(letter)}</div>`;
+      }
+    }
+
+    function schedulePreview() {
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(refreshEditPreview, 450);
+    }
+
+    async function refreshEditPreview() {
+      const payload = readEditForm();
+      if (!payload.slug || !payload.partner_name) return;
+      try {
+        const html = await apiFetch('/api/partners/render', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        document.getElementById('editPreviewFrame').srcdoc = html;
+      } catch (e) {
+        if (e.message !== 'unauthorized') console.warn('preview', e.message);
+      }
+    }
+
+    function closeEdit() {
+      document.getElementById('editOverlay').classList.remove('show');
+      document.getElementById('editOverlay').setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      editingSlug = '';
+    }
+
+    async function openEdit(slug) {
+      let p = partners.find((x) => x.slug === slug);
+      if (!p) {
+        try {
+          const data = await apiFetch(`/api/partners/${encodeURIComponent(slug)}`);
+          p = data.partner;
+        } catch {
+          showToast('加载失败');
+          return;
+        }
+      }
+      editingSlug = slug;
+      document.getElementById('editTitle').textContent = `编辑 · ${p.partner_name || slug}`;
+      document.getElementById('editSub').textContent = `${location.origin}/p/${slug}`;
+      fillEditForm(p);
+      document.getElementById('editOverlay').classList.add('show');
+      document.getElementById('editOverlay').setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      refreshEditPreview();
+    }
+
+    async function saveEdit() {
+      const payload = readEditForm();
+      if (!payload.slug) return;
+      if (!payload.partner_name) { showToast('请填写合作伙伴名称'); return; }
+      const btn = document.getElementById('editSaveBtn');
+      btn.disabled = true;
+      btn.textContent = '保存中…';
+      try {
+        await apiFetch(`/api/partners/${encodeURIComponent(payload.slug)}`, {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+        });
+        showToast('已保存');
+        await loadPartners();
+        closeEdit();
+      } catch (e) {
+        showToast(e.message || '保存失败');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '保存';
+      }
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', generateLink);
+    document.getElementById('partnerNameInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateLink();
+    });
+    document.getElementById('copyResultBtn').addEventListener('click', () => {
+      if (lastGeneratedUrl) copyText(lastGeneratedUrl);
+    });
+    document.getElementById('editCloseBtn').addEventListener('click', closeEdit);
+    document.getElementById('editCancelBtn').addEventListener('click', closeEdit);
+    document.getElementById('editSaveBtn').addEventListener('click', saveEdit);
+    document.getElementById('refreshPreviewBtn').addEventListener('click', refreshEditPreview);
+    document.getElementById('editOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'editOverlay') closeEdit();
+    });
+    document.getElementById('editForm').addEventListener('input', (e) => {
+      if (e.target.id === 'eLogo') updateLogoPreview();
+      if (e.target.id === 'eHero') updateHeroPreview();
+      updateFieldHints();
+      schedulePreview();
+    });
+    document.getElementById('logoUploadBtn').addEventListener('click', () => handleImageUpload('logo'));
+    document.getElementById('heroUploadBtn').addEventListener('click', () => handleImageUpload('hero'));
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      sessionStorage.setItem(AUTH_TOKEN_KEY, btoa(`${user}:${pass}`));
+      try {
+        await apiFetch('/api/partners');
+        hideLogin();
+        await loadPartners();
+      } catch {
+        sessionStorage.removeItem(AUTH_TOKEN_KEY);
+        showLogin('登录失败');
+      }
+    });
+
+    (async () => {
+      if (!loadAuthToken()) { showLogin(); return; }
+      try {
+        await apiFetch('/api/partners');
+        hideLogin();
+        await loadPartners();
+      } catch {
+        showLogin();
+      }
+    })();
+  </script>
+</body>
+</html>

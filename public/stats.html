@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分享统计看板 | Your Event 2026</title>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg-elevated: #111827;
+      --grouped: rgba(255, 255, 255, 0.045);
+      --elevated: rgba(255, 255, 255, 0.08);
+      --fill-tertiary: rgba(255, 255, 255, 0.06);
+      --separator: rgba(255, 255, 255, 0.08);
+      --hairline: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-tertiary: #64748b;
+      --link: #a5b4fc;
+      --link-hover: #c7d2fe;
+      --green: #34d399;
+      --hover-fill: rgba(255, 255, 255, 0.05);
+      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      --radius-group: 16px;
+      --radius-pill: 980px;
+      --content-max: 1080px;
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --surface: var(--grouped);
+      --surface-elevated: var(--elevated);
+      --text-muted: var(--text-secondary);
+      --text-light: var(--text-tertiary);
+      --primary: #818cf8;
+      --primary-hover: #a5b4fc;
+      --border: var(--hairline);
+      --radius: var(--radius-group);
+      --radius-sm: 10px;
+      --success: var(--green);
+      --info: #38bdf8;
+      --warning: #fbbf24;
+      --primary-soft: rgba(129, 140, 248, 0.15);
+      --success-soft: rgba(52, 211, 153, 0.12);
+      --shadow: var(--card-shadow);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(99, 102, 241, 0.18), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 100% 0%, rgba(14, 165, 233, 0.08), transparent 50%);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body.dash-ready .wrap {
+      animation: fadeUp 0.6s var(--ease-out) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes dashFadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes dashPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .wrap {
+      position: relative;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 32px 22px 80px;
+    }
+
+    @media (min-width: 734px) {
+      .wrap { padding: 48px 44px 96px; }
+    }
+
+    /* —— 顶栏（Apple 产品页式） —— */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 40px;
+      padding-bottom: 0;
+    }
+
+  @media (min-width: 734px) {
+      .header { margin-bottom: 56px; }
+    }
+
+    .header-left h1 {
+      font-size: clamp(28px, 4.5vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .header-left p {
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0;
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c7d2fe;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(129, 140, 248, 0.25);
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .pill .live-dot {
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+      animation: dashPulse 2.5s ease-in-out infinite;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: dashPulse 2.5s ease-in-out infinite;
+    }
+
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 15px;
+      font-size: 14px;
+      font-weight: 400;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: opacity 0.15s var(--ease), background 0.15s var(--ease);
+    }
+
+    .btn:active { opacity: 0.65; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 55%, #818cf8 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-primary:hover { filter: brightness(1.06); }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      border: 1px solid var(--hairline);
+      box-shadow: none;
+    }
+
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.08); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--link);
+      padding: 7px 12px;
+    }
+
+    .btn-ghost:hover { color: var(--link-hover); }
+
+    /* 指标卡 */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .metrics { grid-template-columns: 1fr; } }
+
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .metric-num {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--text);
+    }
+
+    .metric.accent-1 .metric-num { color: var(--primary); }
+    .metric.accent-2 .metric-num { color: var(--success); }
+    .metric.accent-3 .metric-num { color: var(--info); }
+    .metric.accent-4 .metric-num { color: var(--warning); }
+
+    /* 布局 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--grouped);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-group);
+      padding: 0;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .panel.compact { padding: 0; }
+
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0;
+      padding: 18px 20px 12px;
+      gap: 12px;
+    }
+
+    .panel-head h2 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .panel-head span,
+    .panel-head a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      text-decoration: none;
+    }
+
+    .panel-head a:hover { color: var(--link); }
+
+    .panel-body { padding: 4px 20px 20px; }
+
+    .panel > .bar-list,
+    .panel > .table-wrap,
+    .panel > .empty,
+    .panel > .chart-wrap,
+    .panel > .summary-metrics {
+      padding: 0 20px 20px;
+    }
+
+    .panel > .stats-hint { padding: 0 20px 12px; margin: 0; }
+
+    /* 条形图 */
+    .bar-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .bar-name { color: var(--text); font-weight: 500; }
+    .bar-count { color: var(--text-muted); font-weight: 600; }
+
+    .bar-track {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #4f46e5, #818cf8);
+      transition: width 0.5s var(--ease);
+    }
+
+    /* 表格 */
+    .table-wrap { overflow-x: auto; }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .data-table th {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text-muted);
+      border-bottom: 0.5px solid var(--separator);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      border-bottom: 0.5px solid var(--separator);
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover td { background: var(--hover-fill); }
+
+    .data-table .col-name { width: 14%; }
+    .data-table .col-email { width: 22%; }
+    .data-table .col-referrer { width: 22%; }
+    .data-table .col-channel { width: 16%; min-width: 108px; }
+    .data-table .col-time { width: 18%; }
+    .data-table .col-rank { width: 72px; }
+    .data-table .col-count { width: 88px; }
+    .data-table .col-link { width: 36%; }
+
+    .data-table.table-leaderboard .col-rank { width: 80px; }
+    .data-table.table-leaderboard .col-user { width: auto; }
+    .data-table.table-leaderboard .col-brought { width: 140px; min-width: 120px; }
+    .data-table.table-share .col-share-user { width: 48%; }
+    .data-table.table-share .col-channel { width: 34%; min-width: 112px; }
+    .data-table.table-share .col-count { width: 18%; min-width: 64px; }
+
+    .data-table.table-page-views .col-share-user { width: 16%; min-width: 100px; }
+    .data-table.table-page-views .col-link-invite { width: auto; min-width: 0; }
+    .data-table.table-page-views .col-link-edit { width: 88px; min-width: 88px; }
+    .data-table.table-page-views .col-count { width: 72px; min-width: 72px; }
+
+    .data-table td.col-link-cell {
+      overflow: hidden;
+      max-width: 0;
+    }
+
+    .data-table.table-page-views td.col-link-edit-cell {
+      max-width: none;
+      width: 88px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .data-table td.col-channel-cell { white-space: nowrap; }
+    .data-table td.col-count-cell { text-align: center; white-space: nowrap; }
+    .data-table th.col-count-head { text-align: center; }
+
+    .sharer-name {
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .sharer-name:hover { text-decoration: underline; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    th {
+      text-align: left;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text-muted);
+      border-bottom: 0.5px solid var(--separator);
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 0.5px solid var(--separator);
+      color: var(--text);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--hover-fill); }
+
+    .rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 5px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .rank-1 { background: rgba(251, 191, 36, 0.18); color: #fbbf24; }
+    .rank-2 { background: rgba(148, 163, 184, 0.18); color: #cbd5e1; }
+    .rank-3 { background: rgba(180, 140, 100, 0.18); color: #d4a574; }
+    .rank-n { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    .tag-copy { background: var(--primary-soft); color: var(--primary); }
+    .tag-linkedin { background: rgba(56, 189, 248, 0.12); color: #38bdf8; }
+    .tag-instagram { background: rgba(228, 64, 95, 0.12); color: #e4405f; }
+    .tag-email { background: rgba(192, 132, 252, 0.12); color: #c084fc; }
+    .tag-page { background: var(--success-soft); color: var(--success); }
+    .tag-default { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+
+    .mono {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      color: var(--text-light);
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .empty::before { display: none; }
+
+    .empty p { margin-top: 6px; font-size: 13px; color: var(--text-light); font-weight: 400; }
+    .empty a { color: var(--primary); }
+
+    .loading {
+      text-align: center;
+      padding: 100px 24px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .loading::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 14px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 0;
+      border-top: none;
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    #app { animation: none; }
+
+    .range-select {
+      height: 36px;
+      padding: 0 14px;
+      border: 1px solid var(--hairline);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .range-select option { background: #1e293b; color: var(--text); }
+
+    .range-select:focus {
+      outline: none;
+      border-color: rgba(129, 140, 248, 0.5);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .chart-panel { margin-bottom: 0; }
+
+    .chart-wrap {
+      position: relative;
+      height: 300px;
+      padding: 4px 0 0;
+    }
+
+    .metric-sub {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .stats-note {
+      font-size: 12px;
+      color: var(--text-light);
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+
+    /* —— 精简看板 —— */
+    .stats-hint {
+      margin: 0 0 20px;
+      padding: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+      background: none;
+      border: none;
+      border-radius: 0;
+    }
+
+    .dash-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .dash-tab {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .dash-tab:hover { color: var(--text); }
+
+    .dash-tab.active {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.35), rgba(99, 102, 241, 0.25));
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .dash-split {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 900px) {
+      .dash-split { grid-template-columns: 1fr; }
+    }
+
+    /* —— 英雄区 —— */
+    .hero-stage {
+      margin-bottom: 28px;
+      padding: 28px 28px 24px;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-group);
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(255, 255, 255, 0.03) 55%);
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-stage::after {
+      display: block;
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(129, 140, 248, 0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-primary {
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .hero-num {
+      display: block;
+      font-size: clamp(56px, 12vw, 88px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+
+    .hero-num.accent {
+      background: linear-gradient(135deg, #f8fafc 0%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .hero-sub {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 0;
+      line-height: 1.5;
+      max-width: 36em;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--separator);
+      position: relative;
+      z-index: 1;
+    }
+
+    .metric-strip-item {
+      padding: 14px 16px;
+      border-right: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .metric-strip-item:first-child { padding-left: 16px; }
+    .metric-strip-item:last-child { padding-right: 16px; }
+
+    .metric-strip-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .metric-strip-num {
+      display: block;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .metric-strip-num.accent { color: var(--success); }
+
+  @media (max-width: 734px) {
+      .metric-strip { grid-template-columns: 1fr; gap: 10px; }
+      .metric-strip-item { padding: 14px 16px; }
+    }
+
+    .summary-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 768px) { .summary-metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px) { .summary-metrics { grid-template-columns: 1fr; } }
+
+    .summary-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-group);
+      padding: 18px 20px;
+      overflow: visible;
+      box-shadow: none;
+    }
+
+    .summary-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .summary-num {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .summary-num.accent {
+      background: linear-gradient(135deg, #a5b4fc, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .summary-sub {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-light);
+      letter-spacing: 0;
+    }
+
+    .panel.compact { padding: 20px 22px; }
+    .panel.compact .panel-head { margin-bottom: 14px; padding-bottom: 12px; }
+
+    .chart-wrap { height: 260px; }
+
+    .num-regs {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 16px;
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+    }
+
+    .search-input::placeholder { color: var(--text-tertiary); }
+
+    .search-input:focus {
+      outline: none;
+      border-color: rgba(129, 140, 248, 0.5);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .referrer-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .referrer-link:hover { text-decoration: underline; }
+
+    .referrer-sub {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-light);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .referrer-cell {
+      display: block;
+      line-height: 1.35;
+    }
+
+    .referrer-unknown {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .share-url {
+      display: block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .share-url:hover { text-decoration: underline; }
+
+    .share-url-edit {
+      display: inline-block;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .share-url-edit:hover { text-decoration: underline; }
+
+    .table-pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 4px 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+
+    .pager-info {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .pager-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pager-btn {
+      min-width: 72px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+
+    .pager-btn:hover:not(:disabled) {
+      color: var(--text);
+      background: var(--elevated);
+    }
+
+    .pager-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    /* 登录 */
+    .login-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.2), transparent 55%);
+    }
+    .login-gate.is-hidden { display: none; }
+
+    .login-card {
+      width: min(400px, 100%);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--hairline);
+      border-radius: 20px;
+      padding: 36px 32px 32px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .login-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.35), rgba(129, 140, 248, 0.2));
+      color: #c7d2fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-icon svg { width: 26px; height: 26px; }
+
+    .login-card h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .login-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.55;
+    }
+
+    .login-form { text-align: left; }
+
+    .login-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .login-field {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .login-field input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px 0 42px;
+      border: 1px solid var(--hairline);
+      border-radius: 10px;
+      font-size: 15px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .login-field input:focus {
+      outline: none;
+      border-color: rgba(129, 140, 248, 0.5);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .login-field input::placeholder { color: var(--text-light); }
+
+    .login-field-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      pointer-events: none;
+      display: flex;
+    }
+    .login-field-icon svg { width: 18px; height: 18px; }
+
+    .login-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--text-light);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-toggle:hover { background: var(--hover-fill); color: var(--text); }
+    .login-toggle svg { width: 18px; height: 18px; }
+
+    .login-remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .login-remember input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .login-error {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fff2f2;
+      border: 1px solid rgba(215, 0, 21, 0.15);
+      color: #d70015;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .login-submit {
+      width: 100%;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 55%, #818cf8 100%);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter .2s, opacity .1s;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.35);
+    }
+    .login-submit:hover { filter: brightness(1.06); }
+    .login-submit:active { opacity: 0.7; }
+    .login-submit:disabled { opacity: .65; cursor: not-allowed; }
+
+    body.is-gated .wrap { visibility: hidden; }
+
+    /* —— 图表 & 排行（iOS 分组列表） —— */
+    .chart-panel { min-height: 0; }
+    .chart-panel canvas { width: 100% !important; height: 220px !important; }
+
+    .chart-legend {
+      display: flex;
+      gap: 24px;
+      padding: 0 20px 8px;
+    }
+
+    .chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    .chart-legend-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .ios-group {
+      background: transparent;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .leader-list { display: flex; flex-direction: column; }
+
+    .leader-row {
+      display: grid;
+      grid-template-columns: 28px 36px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      min-height: 56px;
+      border-bottom: 1px solid var(--separator);
+      transition: background 0.15s var(--ease);
+    }
+
+    .leader-row:nth-child(1) .leader-rank { color: #fbbf24; font-weight: 700; }
+    .leader-row:nth-child(2) .leader-rank { color: #cbd5e1; font-weight: 700; }
+    .leader-row:nth-child(3) .leader-rank { color: #d4a574; font-weight: 700; }
+
+    .leader-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #6366f1, #4338ca);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .leader-row:last-child { border-bottom: none; }
+    .leader-row:hover { background: var(--hover-fill); }
+
+    .leader-rank {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .leader-name {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    .leader-name small {
+      display: none;
+    }
+
+    .leader-stats {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .leader-stats b {
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .section-gap { height: 32px; }
+
+    /* —— 演示 / 运营切换 —— */
+  .ops-chrome {
+      margin-bottom: 32px;
+      transition: opacity 0.3s var(--ease), max-height 0.4s var(--ease);
+    }
+
+    body.presentation-mode .ops-chrome {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      margin-bottom: 0;
+      pointer-events: none;
+    }
+
+    body.presentation-mode .footer,
+    body.presentation-mode .stats-hint { display: none; }
+
+    body.presentation-mode .header { margin-bottom: 32px; }
+    body.presentation-mode .header-left p { display: none; }
+
+    body.presentation-mode .hero-primary,
+    body.presentation-mode .hero-sub { text-align: center; margin-left: auto; margin-right: auto; }
+
+    body.presentation-mode .metric-strip { text-align: center; }
+
+    body.presentation-mode .metric-strip-item {
+      padding: 0 24px;
+    }
+
+    body.presentation-mode .range-select,
+    body.presentation-mode #previewShareBtn,
+    body.presentation-mode a[href="/partners.html"],
+    body.presentation-mode .btn-outline:not(#backBtn) { display: none; }
+
+    body.presentation-mode .dash-tabs {
+      position: fixed;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      margin-bottom: 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    body.presentation-mode .wrap { padding-bottom: 88px; }
+  </style>
+</head>
+<body class="is-gated">
+  <div class="login-gate" id="loginGate">
+    <div class="login-card">
+      <div class="login-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <h2>分享统计看板</h2>
+      <p class="login-desc">内部工具，请输入访问密码继续</p>
+      <form class="login-form" id="loginForm">
+        <label class="login-label" for="loginUser">用户名</label>
+        <div class="login-field">
+          <span class="login-field-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <input id="loginUser" name="username" type="text" autocomplete="username" placeholder="请输入用户名" value="admin" required />
+        </div>
+        <label class="login-label" for="loginPass">访问密码</label>
+        <div class="login-field">
+          <span class="login-field-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input id="loginPass" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required />
+          <button class="login-toggle" type="button" id="loginTogglePass" aria-label="显示密码">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <label class="login-remember">
+          <input type="checkbox" id="loginRemember" checked />
+          记住登录（7 天内免重复输入）
+        </label>
+        <p class="login-error" id="loginError" hidden></p>
+        <button class="login-submit" type="submit" id="loginSubmit">进入看板</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="header">
+      <div class="header-left">
+        <span class="pill"><span class="live-dot" aria-hidden="true"></span> Your Event 2026</span>
+        <h1>传播数据</h1>
+        <p>邀请裂变与报名转化</p>
+      </div>
+      <div class="actions">
+        <select class="range-select" id="statsRange" title="统计时间范围" onchange="onRangeChange()">
+          <option value="day">今日</option>
+          <option value="week">近 7 天</option>
+          <option value="all" selected>全部</option>
+        </select>
+        <button type="button" class="btn btn-ghost" id="presentationToggle" title="演示模式（F11 全屏更佳）">演示</button>
+        <button class="btn btn-outline" id="backBtn" style="display:none" onclick="goOverview()">返回总览</button>
+        <button class="btn btn-outline" onclick="reloadView()">刷新</button>
+        <a class="btn btn-outline" href="/partners.html">合作页</a>
+        <button type="button" class="btn btn-outline" id="previewShareBtn">分享页预览</button>
+      </div>
+    </header>
+
+    <div class="ops-chrome">
+      <div class="search-bar">
+        <input class="search-input" id="uidSearch" type="text" placeholder="输入推荐人 UID，查看带来了多少报名（如 usr_xxx）" />
+        <button class="btn btn-primary" onclick="searchReferrer()">查询推荐人</button>
+      </div>
+    </div>
+
+    <div id="app"><div class="loading">加载中...</div></div>
+    <p class="footer">每 30 秒自动刷新</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    const CHANNEL_LABELS = {
+      page_view: '页面浏览',
+      copy: '复制链接',
+      download: '下载海报',
+      linkedin: 'LinkedIn',
+      email: '邮件邀请',
+      whatsapp: 'WhatsApp',
+      x: 'X 分享点击',
+      instagram: 'Instagram',
+      invite_view: '邀请页浏览',
+      invite_click: '邀请页点击',
+      partner_view: '合作页浏览',
+      partner_click: '合作页点击',
+      partner: '合作渠道',
+    };
+
+    const AUTH_TOKEN_KEY = 'statsAuthToken';
+    const AUTH_EXP_KEY = 'statsAuthExp';
+    const REMEMBER_MS = 7 * 24 * 60 * 60 * 1000;
+    let refreshTimer = null;
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
+    }
+
+    function loadAuthToken() {
+      const exp = Number(localStorage.getItem(AUTH_EXP_KEY) || 0);
+      if (exp && Date.now() > exp) {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_EXP_KEY);
+      }
+      return localStorage.getItem(AUTH_TOKEN_KEY)
+        || sessionStorage.getItem(AUTH_TOKEN_KEY)
+        || sessionStorage.getItem('statsAuth');
+    }
+
+    function saveAuth(user, pass, remember) {
+      const token = btoa(`${user}:${pass}`);
+      sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+      sessionStorage.removeItem('statsAuth');
+      if (remember) {
+        localStorage.setItem(AUTH_TOKEN_KEY, token);
+        localStorage.setItem(AUTH_EXP_KEY, String(Date.now() + REMEMBER_MS));
+      } else {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_EXP_KEY);
+      }
+    }
+
+    function clearAuth() {
+      sessionStorage.removeItem(AUTH_TOKEN_KEY);
+      sessionStorage.removeItem('statsAuth');
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_EXP_KEY);
+    }
+
+    function getStatsAuthHeader() {
+      const token = loadAuthToken();
+      return token ? { Authorization: `Basic ${token}` } : {};
+    }
+
+    function showLoginGate(message) {
+      document.body.classList.add('is-gated');
+      const gate = document.getElementById('loginGate');
+      gate.classList.remove('is-hidden');
+      const err = document.getElementById('loginError');
+      if (message) {
+        err.textContent = message;
+        err.hidden = false;
+      } else {
+        err.hidden = true;
+      }
+      document.getElementById('loginUser').focus();
+    }
+
+    function hideLoginGate() {
+      document.body.classList.remove('is-gated');
+      document.body.classList.add('dash-ready');
+      if (shouldPresentationMode()) document.body.classList.add('presentation-mode');
+      document.getElementById('loginGate').classList.add('is-hidden');
+      document.getElementById('loginError').hidden = true;
+    }
+
+    const PRESENTATION_KEY = 'statsPresentationMode';
+
+    function shouldPresentationMode() {
+      const q = new URLSearchParams(window.location.search).get('present');
+      if (q === '0') return false;
+      if (q === '1') return true;
+      return localStorage.getItem(PRESENTATION_KEY) !== '0';
+    }
+
+    function setPresentationMode(on) {
+      document.body.classList.toggle('presentation-mode', on);
+      localStorage.setItem(PRESENTATION_KEY, on ? '1' : '0');
+      const btn = document.getElementById('presentationToggle');
+      if (btn) {
+        btn.textContent = on ? '运营' : '演示';
+        btn.title = on ? '显示运营工具栏' : '演示模式（F11 全屏更佳）';
+      }
+      if (on && trendChart) trendChart.resize();
+    }
+
+    function togglePresentationMode() {
+      setPresentationMode(!document.body.classList.contains('presentation-mode'));
+    }
+
+    async function statsFetch(url) {
+      const res = await fetch(url, { headers: { ...getStatsAuthHeader() } });
+      if (res.status === 401) {
+        clearAuth();
+        showLoginGate('用户名或密码错误');
+        throw new Error('unauthorized');
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const remember = document.getElementById('loginRemember').checked;
+      const btn = document.getElementById('loginSubmit');
+      btn.disabled = true;
+      document.getElementById('loginError').hidden = true;
+
+      sessionStorage.setItem(AUTH_TOKEN_KEY, btoa(`${user}:${pass}`));
+      sessionStorage.removeItem('statsAuth');
+      try {
+        await statsFetch('/api/stats');
+        saveAuth(user, pass, remember);
+        hideLoginGate();
+        await startDashboard();
+      } catch (err) {
+        clearAuth();
+        if (err.message !== 'unauthorized') {
+          showLoginGate('无法连接服务，请确认 npm start 已运行');
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function startDashboard() {
+      bindPagerClicks();
+      await wirePreviewShareBtn();
+      const initialUid = getQueryUid();
+      if (initialUid) await loadReferrer(initialUid);
+      else await loadStats();
+      if (!refreshTimer) {
+        refreshTimer = window.setInterval(reloadView, 30000);
+      }
+    }
+
+    async function bootstrap() {
+      document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
+      document.getElementById('loginTogglePass').addEventListener('click', () => {
+        const input = document.getElementById('loginPass');
+        const isPass = input.type === 'password';
+        input.type = isPass ? 'text' : 'password';
+      });
+      document.getElementById('uidSearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') searchReferrer();
+      });
+      document.getElementById('presentationToggle')?.addEventListener('click', togglePresentationMode);
+      setPresentationMode(shouldPresentationMode());
+
+      if (!loadAuthToken()) {
+        showLoginGate();
+        return;
+      }
+
+      try {
+        await statsFetch('/api/stats');
+        hideLoginGate();
+        await startDashboard();
+      } catch {
+        showLoginGate();
+      }
+    }
+
+    const PAGE_SIZE = 10;
+    const tablePages = {};
+    let statsCache = null;
+    let referrerCache = null;
+    let statsRange = 'all';
+    let trendChart = null;
+    let activeStatsTab = 'overview';
+
+    function switchStatsTab(tab) {
+      activeStatsTab = tab;
+      document.querySelectorAll('.dash-tab').forEach((el) => {
+        el.classList.toggle('active', el.dataset.tab === tab);
+      });
+      document.querySelectorAll('.tab-panel').forEach((el) => {
+        el.classList.toggle('active', el.id === `tab-${tab}`);
+      });
+      if (tab === 'overview' && statsCache?.dailySeries) {
+        mountTrendChart(statsCache.dailySeries);
+        animateMetricNumbers(document.getElementById('tab-overview'));
+      }
+    }
+
+    function renderStatsHint() {
+      return `<p class="stats-hint">${rangeLabel(statsRange)}</p>`;
+    }
+
+    function animateMetricNumbers(root = document) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const els = (root || document).querySelectorAll('[data-metric]');
+      els.forEach((el, i) => {
+        const kind = el.dataset.metricKind || 'int';
+        const target = kind === 'pct'
+          ? parseFloat(el.dataset.metric) || 0
+          : Math.round(Number(el.dataset.metric) || 0);
+        const duration = 700 + i * 80;
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - (1 - t) ** 3;
+          if (kind === 'pct') {
+            el.textContent = `${Math.round(target * eased * 10) / 10}%`;
+          } else {
+            el.textContent = String(Math.round(target * eased));
+          }
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+
+    function renderSummaryMetrics(o) {
+      const viewsUv = Number(o.invite_views_uv) || 0;
+      const clicksUv = Number(o.invite_clicks_uv) || 0;
+      const regs = Number(o.referral_registrations) || 0;
+      const conv = viewsUv ? Math.round((regs / viewsUv) * 1000) / 10 : 0;
+      const range = rangeLabel(statsRange);
+      return `<div class="hero-stage">
+        <div class="hero-primary">
+          <span class="hero-eyebrow">带来报名 · ${range}</span>
+          <span class="hero-num accent" data-metric="${regs}" data-metric-kind="int">0</span>
+          <span class="hero-sub">通过分享链接完成注册的有效推荐归因</span>
+        </div>
+        <div class="metric-strip">
+          <div class="metric-strip-item">
+            <span class="metric-strip-label">邀请访客</span>
+            <span class="metric-strip-num" data-metric="${viewsUv}" data-metric-kind="int">0</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-label">点击报名</span>
+            <span class="metric-strip-num" data-metric="${clicksUv}" data-metric-kind="int">0</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-label">转化率</span>
+            <span class="metric-strip-num" data-metric="${conv}" data-metric-kind="pct">0%</span>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function sharerInitial(name, uid) {
+      const n = String(name || '').trim();
+      if (n && n !== '—') return n.charAt(0).toUpperCase();
+      const u = String(uid || '').replace(/^usr_/, '');
+      return (u.charAt(0) || '?').toUpperCase();
+    }
+
+    function renderSpreadRankingDemo(rows) {
+      const list = (rows || [])
+        .filter((r) => r.referrer_uid || r.sharer_uid)
+        .sort((a, b) => (Number(b.registrations) || 0) - (Number(a.registrations) || 0)
+          || (Number(b.invite_views_uv) || 0) - (Number(a.invite_views_uv) || 0))
+        .slice(0, 8);
+      if (!list.length) {
+        return '<div class="empty">暂无传播数据<p>有人通过分享链接带来访客或报名后会显示在这里</p></div>';
+      }
+      return `<div class="leader-list">${list.map((r, i) => {
+        const name = escapeHtml(r.referrer_name || shortUid(r.referrer_uid) || '分享者');
+        const uid = escapeHtml(shortUid(r.referrer_uid || r.sharer_uid));
+        const views = r.invite_views_uv ?? 0;
+        const regs = r.registrations || 0;
+        const initial = escapeHtml(sharerInitial(r.referrer_name, r.referrer_uid));
+        return `<div class="leader-row">
+          <span class="leader-rank">${i + 1}</span>
+          <span class="leader-avatar">${initial}</span>
+          <span class="leader-name">${name}</span>
+          <span class="leader-stats"><b>${regs}</b> 报名</span>
+        </div>`;
+      }).join('')}</div>`;
+    }
+
+    function renderSpreadRanking(rows, tableId = 'spreadRank') {
+      const list = (rows || [])
+        .filter((r) => r.referrer_uid || r.sharer_uid)
+        .sort((a, b) => (Number(b.registrations) || 0) - (Number(a.registrations) || 0)
+          || (Number(b.invite_views_uv) || 0) - (Number(a.invite_views_uv) || 0));
+      if (!list.length) {
+        return '<div class="empty">暂无数据<p>有人通过分享链接带来访客或报名后会显示在这里</p></div>';
+      }
+      const meta = paginateRows(list, tableId);
+      const offset = (meta.page - 1) * PAGE_SIZE;
+      return `<div class="table-wrap"><table class="data-table table-leaderboard">
+        <thead><tr>
+          <th>排名</th><th>分享人</th>
+          <th class="col-count-head">访客</th>
+          <th class="col-count-head">报名</th>
+        </tr></thead>
+        <tbody>${meta.slice.map((r, i) => `<tr>
+          <td>${rankBadge(offset + i)}</td>
+          <td>${renderSharerCell(r.referrer_uid, r.referrer_name)}</td>
+          <td class="col-count-cell">${r.invite_views_uv ?? 0}</td>
+          <td class="col-count-cell"><span class="num-regs">${r.registrations || 0}</span></td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function getStatsRange() {
+      const sel = document.getElementById('statsRange');
+      const v = sel?.value || statsRange || 'all';
+      statsRange = ['day', 'week', 'all'].includes(v) ? v : 'all';
+      return statsRange;
+    }
+
+    function onRangeChange() {
+      statsCache = null;
+      Object.keys(tablePages).forEach((k) => { delete tablePages[k]; });
+      statsRange = getStatsRange();
+      loadStats();
+    }
+
+    function rangeLabel(key) {
+      if (key === 'day') return '今日';
+      if (key === 'week') return '近 7 天';
+      return '全部';
+    }
+
+    function getTablePage(tableId) {
+      return tablePages[tableId] || 1;
+    }
+
+    function paginateRows(rows, tableId) {
+      const list = rows || [];
+      const total = list.length;
+      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      let page = getTablePage(tableId);
+      if (page > totalPages) page = totalPages;
+      if (page < 1) page = 1;
+      tablePages[tableId] = page;
+      const start = (page - 1) * PAGE_SIZE;
+      return {
+        slice: list.slice(start, start + PAGE_SIZE),
+        page,
+        totalPages,
+        total,
+      };
+    }
+
+    function renderPager(tableId, meta) {
+      if (!meta.total || meta.totalPages <= 1) return '';
+      return `<div class="table-pager">
+        <span class="pager-info">共 ${meta.total} 条 · 第 ${meta.page}/${meta.totalPages} 页</span>
+        <div class="pager-actions">
+          <button type="button" class="pager-btn" data-table="${tableId}" data-page="${meta.page - 1}" ${meta.page <= 1 ? 'disabled' : ''}>上一页</button>
+          <button type="button" class="pager-btn" data-table="${tableId}" data-page="${meta.page + 1}" ${meta.page >= meta.totalPages ? 'disabled' : ''}>下一页</button>
+        </div>
+      </div>`;
+    }
+
+    function bindPagerClicks() {
+      const app = document.getElementById('app');
+      if (app.dataset.pagerBound) return;
+      app.dataset.pagerBound = '1';
+      app.addEventListener('click', (e) => {
+        const btn = e.target.closest('.pager-btn[data-table]');
+        if (!btn || btn.disabled) return;
+        const tableId = btn.dataset.table;
+        const page = Number(btn.dataset.page);
+        if (!tableId || !page) return;
+        tablePages[tableId] = page;
+        if (statsCache) renderStatsFromCache();
+        else if (referrerCache) renderReferrerFromCache();
+      });
+    }
+    function channelLabel(ch) {
+      if (CHANNEL_LABELS[ch]) return CHANNEL_LABELS[ch];
+      if (String(ch).startsWith('invite_inbound_')) {
+        const sub = String(ch).slice('invite_inbound_'.length);
+        const subLabel = CHANNEL_LABELS[sub] || sub;
+        return `邀请页来自 ${subLabel}`;
+      }
+      return ch ? escapeHtml(ch) : '—';
+    }
+
+    function channelTag(ch) {
+      const map = { page_view: 'tag-page', copy: 'tag-copy', download: 'tag-copy', linkedin: 'tag-linkedin', instagram: 'tag-instagram', email: 'tag-email' };
+      return `<span class="tag ${map[ch] || 'tag-default'}">${channelLabel(ch)}</span>`;
+    }
+
+    function shortUid(uid) {
+      if (!uid) return '';
+      if (uid.length <= 14) return uid;
+      return `${uid.slice(0, 10)}…`;
+    }
+
+    function renderReferrerCell(uid, name, email) {
+      if (!uid) return '<span class="tag tag-default">直接</span>';
+      const displayName = (name && name !== '—') ? name : '未知推荐人';
+      const sub = email || (displayName === '未知推荐人' ? shortUid(uid) : '');
+      const title = escapeAttr([displayName, email, uid].filter(Boolean).join(' · '));
+      const safeName = escapeHtml(displayName);
+      const safeSub = escapeHtml(sub);
+      if (!sub) {
+        return `<a class="sharer-name" href="?uid=${encodeURIComponent(uid)}" title="${title}">${safeName}</a>`;
+      }
+      return `<a class="referrer-link referrer-cell" href="?uid=${encodeURIComponent(uid)}" title="${title}">
+        <strong>${safeName}</strong>
+        <span class="referrer-sub">${safeSub}</span>
+      </a>`;
+    }
+
+    function renderSharerCell(uid, name) {
+      if (!uid) return '—';
+      const label = (name && name !== '—') ? name : shortUid(uid);
+      const title = escapeAttr([name, uid].filter(Boolean).join(' · '));
+      return `<a class="sharer-name" href="?uid=${encodeURIComponent(uid)}" title="${title}">${escapeHtml(label)}</a>`;
+    }
+
+    function rankBadge(i) {
+      const cls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
+      return `<span class="rank ${cls}">${i + 1}</span>`;
+    }
+
+    function renderBars(rows, nameKey, countKey) {
+      if (!rows?.length) {
+        return '<div class="empty">暂无数据<p>有分享或注册行为后会显示在这里</p></div>';
+      }
+      const max = Math.max(...rows.map((r) => Number(r[countKey] ?? r.count) || 0), 1);
+      return `<div class="bar-list">${rows.map((r) => {
+        const n = Number(r[countKey] ?? r.count) || 0;
+        const uv = Number(r.count_uv);
+        const countHtml = Number.isFinite(uv) && uv >= 0 && (countKey === 'count_pv' || countKey === 'count')
+          ? `${n}<span style="color:var(--text-light);font-weight:500;font-size:11px"> · UV ${uv}</span>`
+          : String(n);
+        const name = (nameKey === 'channel' || nameKey === 'register_channel')
+          ? channelLabel(r[nameKey])
+          : nameKey === 'inbound_channel'
+            ? channelLabel(`invite_inbound_${r[nameKey] || ''}`)
+            : escapeHtml(r[nameKey] || '—');
+        return `<div><div class="bar-meta"><span class="bar-name">${name}</span><span class="bar-count">${countHtml}</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.round(n / max * 100)}%"></div></div></div>`;
+      }).join('')}</div>`;
+    }
+
+    function renderTrendChart(dailySeries) {
+      if (!dailySeries?.length || typeof Chart === 'undefined') {
+        return '<div class="empty" style="margin:0">暂无趋势数据<p>有浏览或报名后会显示折线图</p></div>';
+      }
+      return '<div class="chart-wrap"><canvas id="trendChart"></canvas></div>';
+    }
+
+    function mountTrendChart(dailySeries) {
+      const canvas = document.getElementById('trendChart');
+      if (!canvas || typeof Chart === 'undefined' || !dailySeries?.length) return;
+      if (trendChart) {
+        trendChart.destroy();
+        trendChart = null;
+      }
+      const labels = dailySeries.map((d) => String(d.day || '').slice(5));
+      trendChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: '邀请访客 UV',
+              data: dailySeries.map((d) => Number(d.invite_views_uv) || 0),
+              borderColor: '#818cf8',
+              backgroundColor: (ctx) => {
+                const { chart } = ctx;
+                const { ctx: c, chartArea } = chart;
+                if (!chartArea) return 'transparent';
+                const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                g.addColorStop(0, 'rgba(129, 140, 248, 0.22)');
+                g.addColorStop(1, 'rgba(129, 140, 248, 0)');
+                return g;
+              },
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: '#818cf8',
+              tension: 0.4,
+              fill: true,
+            },
+            {
+              label: '推荐报名',
+              data: dailySeries.map((d) => Number(d.registrations) || 0),
+              borderColor: '#34d399',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: '#34d399',
+              tension: 0.4,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(17, 24, 39, 0.96)',
+              titleColor: '#f8fafc',
+              bodyColor: '#94a3b8',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1,
+              titleFont: { size: 12, weight: '600' },
+              bodyFont: { size: 12 },
+              padding: 10,
+              cornerRadius: 8,
+              displayColors: true,
+            },
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              border: { display: false },
+              ticks: { font: { size: 11 }, color: '#64748b', maxRotation: 0, padding: 8 },
+            },
+            y: {
+              beginAtZero: true,
+              border: { display: false },
+              grid: { color: 'rgba(255, 255, 255, 0.06)', drawTicks: false },
+              ticks: { precision: 0, font: { size: 11 }, color: '#64748b', padding: 10, maxTicksLimit: 5 },
+            },
+          },
+        },
+      });
+    }
+
+    function renderLeaderboard(rows, tableId = 'leaderboard') {
+      if (!rows?.length) {
+        return '<div class="empty">暂无邀请数据<p>用户通过分享链接带来新报名后会显示在这里</p></div>';
+      }
+      const meta = paginateRows(rows, tableId);
+      const offset = (meta.page - 1) * PAGE_SIZE;
+      return `<div class="table-wrap"><table class="data-table table-leaderboard">
+        <colgroup>
+          <col class="col-rank"><col class="col-user"><col class="col-brought">
+        </colgroup>
+        <thead><tr><th>排名</th><th>用户</th><th class="col-count-head">带来的报名人数</th></tr></thead>
+        <tbody>${meta.slice.map((r, i) => `<tr>
+          <td>${rankBadge(offset + i)}</td>
+          <td>${renderReferrerCell(r.referrer_uid, r.referrer_name, r.referrer_email)}</td>
+          <td class="col-count-cell"><strong>${r.new_registrations}</strong></td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function renderReferredUsers(rows, tableId = 'referredUsers') {
+      if (!rows?.length) {
+        return '<div class="empty">暂无通过该用户带来的报名<p>对方需通过其分享的带 utm 链接注册才会统计</p></div>';
+      }
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table">
+        <colgroup>
+          <col class="col-name"><col class="col-email"><col style="width:16%"><col class="col-channel"><col class="col-time">
+        </colgroup>
+        <thead><tr><th>姓名</th><th>邮箱</th><th>公司</th><th>渠道</th><th>报名时间</th></tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td><strong>${escapeHtml(r.name || '—')}</strong></td>
+          <td>${escapeHtml(r.email || '—')}</td>
+          <td>${escapeHtml(r.company || '—')}</td>
+          <td>${r.register_channel ? channelTag(r.register_channel) : '<span class="tag tag-default">未知</span>'}</td>
+          <td style="color:var(--text-light);font-size:12px">${escapeHtml(r.create_time || '—')}</td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function getQueryUid() {
+      return new URLSearchParams(window.location.search).get('uid')?.trim() || '';
+    }
+
+    function setViewMode(isReferrer) {
+      document.getElementById('backBtn').style.display = isReferrer ? 'inline-flex' : 'none';
+    }
+
+    function goOverview() {
+      history.pushState({}, '', '/stats.html');
+      document.getElementById('uidSearch').value = '';
+      loadStats();
+    }
+
+    function searchReferrer() {
+      const uid = document.getElementById('uidSearch').value.trim();
+      if (!uid) return;
+      history.pushState({}, '', `?uid=${encodeURIComponent(uid)}`);
+      loadReferrer(uid);
+    }
+
+    async function loadReferrer(uid) {
+      const app = document.getElementById('app');
+      app.classList.remove('loading');
+      setViewMode(true);
+      document.getElementById('uidSearch').value = uid;
+      app.innerHTML = '<div class="loading">加载中...</div>';
+      try {
+        const data = await statsFetch(`/api/referrer/${encodeURIComponent(uid)}`);
+        referrerCache = { data, uid };
+        statsCache = null;
+        app.innerHTML = renderReferrerOverview(data);
+      } catch {
+        referrerCache = null;
+        app.innerHTML = '<div class="empty">查询失败<p>请确认 UID 正确且服务已运行</p></div>';
+      }
+    }
+
+    function reloadView() {
+      const uid = getQueryUid();
+      if (uid) loadReferrer(uid);
+      else loadStats();
+    }
+
+    function renderShareUsers(rows, tableId = 'shareUsers') {
+      if (!rows?.length) return '<div class="empty">暂无分享记录</div>';
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table table-share">
+        <colgroup>
+          <col class="col-share-user"><col class="col-channel"><col class="col-count">
+        </colgroup>
+        <thead><tr><th>分享人</th><th>渠道</th><th class="col-count-head">PV</th><th class="col-count-head">UV</th></tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td>${renderSharerCell(r.sharer_uid, r.sharer_name)}</td>
+          <td class="col-channel-cell">${channelTag(r.channel)}</td>
+          <td class="col-count-cell"><strong>${r.count_pv ?? r.count ?? 0}</strong></td>
+          <td class="col-count-cell">${r.count_uv ?? '—'}</td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function renderRecent(rows, tableId = 'recentRegistrants') {
+      if (!rows?.length) return '<div class="empty">暂无注册用户</div>';
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table">
+        <colgroup>
+          <col class="col-name"><col class="col-email"><col class="col-referrer"><col class="col-channel"><col class="col-time">
+        </colgroup>
+        <thead><tr><th>姓名</th><th>邮箱</th><th>推荐人</th><th>渠道</th><th>时间</th></tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td><strong>${escapeHtml(r.name || '—')}</strong></td>
+          <td>${escapeHtml(r.email || '—')}</td>
+          <td>${renderReferrerCell(r.referred_by, r.referrer_name, r.referrer_email)}</td>
+          <td class="col-channel-cell">${r.register_channel ? channelTag(r.register_channel) : '<span class="tag tag-default">直接</span>'}</td>
+          <td style="color:var(--text-light);font-size:12px">${escapeHtml(r.create_time || '—')}</td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    async function buildShareLink(uid) {
+      try {
+        const data = await statsFetch(`/api/signed-share-link?uid=${encodeURIComponent(uid || '')}`);
+        if (data.success && data.url) return data.url;
+      } catch {}
+      return '';
+    }
+
+    function formatInviteLinkLabel(url, uid) {
+      const safeUid = String(uid || '').trim();
+      if (safeUid) return `/i/${safeUid}`;
+      try {
+        const u = new URL(url);
+        return `${u.pathname}${u.search ? '…' : ''}`;
+      } catch {
+        const s = String(url || '');
+        return s.length > 40 ? `${s.slice(0, 37)}…` : s;
+      }
+    }
+
+    async function renderPageViews(rows, tableId = 'pageViews') {
+      if (!rows?.length) {
+        return '<div class="empty">暂无分享页浏览记录<p>用户打开邮件里的分享链接后会显示在这里</p></div>';
+      }
+      const meta = paginateRows(rows, tableId);
+      const bodyRows = meta.slice.map((r) => {
+        const invite = r.invite_url || '';
+        const share = r.share_url || '';
+        const inviteLabel = formatInviteLinkLabel(invite, r.sharer_uid);
+        const inviteCell = invite
+          ? `<a class="share-url" href="${escapeAttr(invite)}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(invite)}">${escapeHtml(inviteLabel)}</a>`
+          : '<span class="tag tag-default">—</span>';
+        const shareCell = share
+          ? `<a class="share-url-edit" href="${escapeAttr(share)}" target="_blank" rel="noopener noreferrer" title="${escapeAttr(share)}">编辑页</a>`
+          : '<span class="tag tag-default">—</span>';
+        return `<tr>
+            <td>${renderSharerCell(r.sharer_uid, r.sharer_name)}</td>
+            <td class="col-link-cell">${inviteCell}</td>
+            <td class="col-link-edit-cell">${shareCell}</td>
+            <td class="col-count-cell"><strong>${r.count_pv ?? r.count ?? 0}</strong></td>
+          </tr>`;
+      });
+      return `<div class="table-wrap"><table class="data-table table-page-views">
+        <colgroup>
+          <col class="col-share-user"><col class="col-link-invite"><col class="col-link-edit"><col class="col-count">
+        </colgroup>
+        <thead><tr><th>分享人</th><th>传播链接 /i/</th><th>编辑页</th><th class="col-count-head">PV</th></tr></thead>
+        <tbody>${bodyRows.join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function renderTickets(rows, tableId = 'tickets') {
+      if (!rows?.length) return '<div class="empty">暂无购票记录</div>';
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table">
+        <colgroup>
+          <col class="col-referrer"><col class="col-count"><col class="col-count">
+        </colgroup>
+        <thead><tr><th>推荐人</th><th>购票数</th><th>总金额</th></tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td>${renderReferrerCell(r.referrer_uid || r.referred_by, r.referrer_name, '')}</td>
+          <td>${r.ticket_count}</td>
+          <td>${r.total_amount || 0}</td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function pct(num, den) {
+      const n = Number(num) || 0;
+      const d = Number(den) || 0;
+      if (!d) return '—';
+      return `${Math.round((n / d) * 1000) / 10}%`;
+    }
+
+    async function renderStatsOverview(data) {
+      const o = data.overview;
+      const pageViewsHtml = await renderPageViews(data.pageViewsByUser);
+      const chartHtml = renderTrendChart(data.dailySeries);
+      const tab = activeStatsTab || 'overview';
+      return `
+        <nav class="dash-tabs">
+          <button type="button" class="dash-tab ${tab === 'overview' ? 'active' : ''}" data-tab="overview" onclick="switchStatsTab('overview')">总览</button>
+          <button type="button" class="dash-tab ${tab === 'channels' ? 'active' : ''}" data-tab="channels" onclick="switchStatsTab('channels')">渠道</button>
+          <button type="button" class="dash-tab ${tab === 'details' ? 'active' : ''}" data-tab="details" onclick="switchStatsTab('details')">明细</button>
+        </nav>
+        ${renderStatsHint()}
+
+        <div id="tab-overview" class="tab-panel ${tab === 'overview' ? 'active' : ''}">
+          ${renderSummaryMetrics(o)}
+          <div class="dash-split">
+            <div class="panel chart-panel">
+              <div class="panel-head"><h2>趋势</h2><span>近 ${(data.dailySeries || []).length} 天</span></div>
+              <div class="chart-legend" aria-hidden="true">
+                <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#818cf8"></span>访客</span>
+                <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#34d399"></span>报名</span>
+              </div>
+              <div class="panel-body">${chartHtml}</div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h2>排行</h2><span>按报名数</span></div>
+              <div class="ios-group">${renderSpreadRankingDemo(data.inviteFunnelByUser)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-channels" class="tab-panel ${tab === 'channels' ? 'active' : ''}">
+          <div class="grid-2">
+            <div class="panel compact"><div class="panel-head"><h2>分享渠道</h2><span>copy / X 等</span></div>${renderBars(data.shareByChannel.filter((r) => r.channel !== 'page_view' && r.channel !== 'invite_view' && r.channel !== 'invite_click' && !String(r.channel).startsWith('invite_inbound_')), 'channel', 'count_pv')}</div>
+            <div class="panel compact"><div class="panel-head"><h2>报名来源</h2></div>${renderBars(data.registerByChannel, 'register_channel', 'count')}</div>
+          </div>
+          <div class="panel compact"><div class="panel-head"><h2>邀请页来源</h2></div>${renderBars(data.inviteInboundByChannel, 'inbound_channel', 'count_pv')}</div>
+          <div class="panel compact"><div class="panel-head"><h2>合作渠道</h2><span><a href="/partners.html">管理</a></span></div>${renderPartnerFunnelTable(data.partnerFunnel)}</div>
+        </div>
+
+        <div id="tab-details" class="tab-panel ${tab === 'details' ? 'active' : ''}">
+          <p class="stats-hint" style="margin-top:0">需要 PV/UV 细数据时看这里 · PV=次数 UV=独立访客</p>
+          <div class="summary-metrics" style="grid-template-columns:repeat(3,1fr)">
+            <div class="summary-item"><span class="summary-label">总注册</span><span class="summary-num">${o.total_registrants}</span></div>
+            <div class="summary-item"><span class="summary-label">分享页打开 PV</span><span class="summary-num">${o.page_views_pv ?? o.page_views}</span></div>
+            <div class="summary-item"><span class="summary-label">购票</span><span class="summary-num">${o.total_tickets}</span></div>
+          </div>
+          <div class="panel compact"><div class="panel-head"><h2>漏斗明细</h2></div>${renderInviteFunnelTable(data.inviteFunnelByUser)}</div>
+          <div class="panel compact"><div class="panel-head"><h2>邀请榜</h2></div>${renderLeaderboard(data.referralLeaderboard)}</div>
+          <div class="panel compact"><div class="panel-head"><h2>分享页打开</h2></div>${pageViewsHtml}</div>
+          <div class="grid-2">
+            <div class="panel compact"><div class="panel-head"><h2>分享行为</h2></div>${renderShareUsers(data.shareByUser)}</div>
+            <div class="panel compact"><div class="panel-head"><h2>推荐购票</h2></div>${renderTickets(data.ticketByReferrer)}</div>
+          </div>
+          <div class="panel compact"><div class="panel-head"><h2>最近报名</h2></div>${renderRecent(data.recentRegistrants)}</div>
+        </div>
+      `;
+    }
+
+    function renderInviteFunnelTable(rows, tableId = 'inviteFunnel') {
+      if (!rows?.length) {
+        return '<div class="empty">暂无邀请漏斗数据<p>有人打开 /i/ 邀请链接并点击后会显示在这里</p></div>';
+      }
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table">
+        <colgroup>
+          <col class="col-share-user"><col class="col-count"><col class="col-count"><col class="col-count"><col class="col-count"><col class="col-count">
+        </colgroup>
+        <thead><tr>
+          <th>分享人</th>
+          <th class="col-count-head">浏览</th>
+          <th class="col-count-head">点击</th>
+          <th class="col-count-head">报名</th>
+        </tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td>${renderSharerCell(r.referrer_uid, r.referrer_name)}</td>
+          <td class="col-count-cell">${r.invite_views_uv ?? r.invite_views_pv ?? 0}</td>
+          <td class="col-count-cell">${r.invite_clicks_uv ?? r.invite_clicks_pv ?? 0}</td>
+          <td class="col-count-cell"><span class="num-regs">${r.registrations || 0}</span></td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function renderPartnerFunnelTable(rows, tableId = 'partnerFunnel') {
+      if (!rows?.length) {
+        return '<div class="empty">暂无合作渠道数据<p>在 <a href="/partners.html">合作落地页</a> 创建页面并分发链接</p></div>';
+      }
+      const meta = paginateRows(rows, tableId);
+      return `<div class="table-wrap"><table class="data-table">
+        <colgroup>
+          <col class="col-share-user"><col class="col-count"><col class="col-count"><col class="col-count"><col class="col-count"><col class="col-count">
+        </colgroup>
+        <thead><tr>
+          <th>合作伙伴</th>
+          <th class="col-count-head">页面浏览</th>
+          <th class="col-count-head">点击购票</th>
+          <th class="col-count-head">带来报名</th>
+          <th class="col-count-head">浏览→点击</th>
+          <th class="col-count-head">点击→报名</th>
+        </tr></thead>
+        <tbody>${meta.slice.map((r) => `<tr>
+          <td><strong>${escapeHtml(r.partner_name || r.slug)}</strong><br><span style="font-size:11px;color:var(--text-light)">/p/${escapeHtml(r.slug)}</span></td>
+          <td class="col-count-cell"><strong>${r.partner_views || 0}</strong></td>
+          <td class="col-count-cell"><strong>${r.partner_clicks || 0}</strong></td>
+          <td class="col-count-cell"><strong>${r.registrations || 0}</strong></td>
+          <td class="col-count-cell">${pct(r.partner_clicks, r.partner_views)}</td>
+          <td class="col-count-cell">${pct(r.registrations, r.partner_clicks)}</td>
+        </tr>`).join('')}</tbody></table></div>${renderPager(tableId, meta)}`;
+    }
+
+    function renderReferrerOverview(data) {
+      const name = escapeHtml(data.display_name || data.referrer?.display_name || data.referrer?.name || '未知用户');
+      const email = escapeHtml(data.referrer?.email || '—');
+      const uidTitle = escapeAttr(data.uid || '');
+      return `
+          <div class="panel" style="margin-bottom:16px">
+            <div class="panel-head"><h2>推荐人详情</h2><span>UID 查询</span></div>
+            <p style="font-size:15px;margin-bottom:8px"><strong>${name}</strong> · ${email}</p>
+            <p style="font-size:12px;color:var(--text-light)" title="${uidTitle}">UID ${escapeHtml(shortUid(data.uid))}</p>
+          </div>
+          <div class="summary-metrics" style="grid-template-columns:repeat(3,1fr)">
+            <div class="summary-item"><span class="summary-label">带来报名</span><span class="summary-num accent">${data.total_registrations}</span></div>
+            <div class="summary-item"><span class="summary-label">邀请浏览</span><span class="summary-num">${data.invite_views || 0}</span></div>
+            <div class="summary-item"><span class="summary-label">邀请点击</span><span class="summary-num">${data.invite_clicks || 0}</span></div>
+          </div>
+          <div class="grid-2">
+            <div class="panel compact"><div class="panel-head"><h2>报名来源</h2></div>${renderBars(data.registrations_by_channel, 'register_channel', 'count')}</div>
+            <div class="panel compact"><div class="panel-head"><h2>分享行为</h2></div>${renderBars(data.share_actions, 'channel', 'count')}</div>
+          </div>
+          <div class="panel compact"><div class="panel-head"><h2>带来的报名</h2><span>共 ${data.total_registrations} 人</span></div>${renderReferredUsers(data.referred_users)}</div>
+        `;
+    }
+
+    async function renderStatsFromCache() {
+      if (!statsCache) return;
+      const app = document.getElementById('app');
+      app.innerHTML = await renderStatsOverview(statsCache);
+      if (activeStatsTab === 'overview') {
+        mountTrendChart(statsCache.dailySeries);
+        animateMetricNumbers(app);
+      }
+    }
+
+    function renderReferrerFromCache() {
+      if (!referrerCache) return;
+      document.getElementById('app').innerHTML = renderReferrerOverview(referrerCache.data);
+    }
+
+    async function loadStats() {
+      const app = document.getElementById('app');
+      app.classList.remove('loading');
+      setViewMode(false);
+      const range = getStatsRange();
+      const sel = document.getElementById('statsRange');
+      if (sel) sel.value = range;
+      try {
+        const data = await statsFetch(`/api/stats?range=${encodeURIComponent(range)}`);
+        statsCache = data;
+        referrerCache = null;
+        app.innerHTML = await renderStatsOverview(data);
+        switchStatsTab(activeStatsTab);
+        if (activeStatsTab === 'overview') {
+          mountTrendChart(data.dailySeries);
+          animateMetricNumbers(app);
+        }
+      } catch {
+        statsCache = null;
+        app.innerHTML = '<div class="empty">加载失败<p>请确认 npm start 已运行</p></div>';
+      }
+    }
+
+    async function openPreviewSharePage() {
+      const btn = document.getElementById('previewShareBtn');
+      if (!btn || btn.disabled) return;
+      btn.disabled = true;
+      const prevText = btn.textContent;
+      btn.textContent = '生成链接…';
+      try {
+        const data = await statsFetch('/api/signed-share-link');
+        if (data.success && data.url) {
+          window.open(data.url, '_blank', 'noopener,noreferrer');
+          btn.title = '打开 admin-preview 签名分享页';
+          return;
+        }
+        alert('无法生成预览链接，请确认服务器 config.js 含 seedRegistrant');
+      } catch (err) {
+        if (err.message === 'unauthorized') return;
+        alert('预览分享页失败：\n· 检查 deploy/env.sh 是否配置 SHARE_LINK_SECRET\n· 检查 config.js 是否有 seedRegistrant\n· 执行 bash deploy/deploy.sh 重启服务');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prevText;
+      }
+    }
+
+    async function wirePreviewShareBtn() {
+      const btn = document.getElementById('previewShareBtn');
+      if (!btn || btn.dataset.previewBound) return;
+      btn.dataset.previewBound = '1';
+      btn.addEventListener('click', openPreviewSharePage);
+      try {
+        const data = await statsFetch('/api/signed-share-link');
+        if (data.success && data.url) {
+          btn.title = '打开 admin-preview 签名分享页';
+        }
+      } catch {
+        btn.title = '点击生成带签名的 admin-preview 分享页';
+      }
+    }
+    bootstrap();
+  </script>
+</body>
+</html>
