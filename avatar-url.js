@@ -31,7 +31,6 @@ function isPrivateOrLocalHost(hostname) {
   if (ipVersion === 6) return isPrivateIpv6(host);
   return false;
 }
-
 function collectAllowedAvatarHosts(config = {}) {
   const hosts = new Set([
     'your-cdn.example.com',
